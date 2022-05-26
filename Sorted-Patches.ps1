@@ -17,10 +17,10 @@ Write-Host "Checking $($ServerList.count) Servers"
 
 $sorted={
 foreach ($Server in $ServerList) {
- get-hotfix -ComputerName $Server | where {$_.HotfixID -Like "KB5015019"} | ft -AutoSize
+ get-hotfix -ComputerName $Server | Where-Object {$_.HotfixID -Like "KB5015019"} | Format-Table -AutoSize
  #get-hotfix -ComputerName $Server | where {$_.installedon -Like "*2022"} | Sort-Object -Property InstalledOn | ft -AutoSize
  #get-hotfix -ComputerName $Server | Sort-Object -Property InstalledOn -Descending | ft -AutoSize
 }
 }
 
-Write-host $sorted | Sort-Object -Property InstalledOn | ft -AutoSize
+Write-host $sorted | Sort-Object -Property InstalledOn | Format-Table -AutoSize
