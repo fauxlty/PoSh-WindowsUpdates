@@ -86,5 +86,5 @@ Write-Host "Checking $ServersToScan Servers"
        }
     
 
-$array.GetEnumerator() | ft -AutoSize
+$array.GetEnumerator() | Format-Table -AutoSize
 $array | Export-Csv -NoTypeInformation -Force "wmforestpatch-$hotfixID-$date.csv"

@@ -12,6 +12,6 @@ $ServerList = Get-Content -Path D:\SEID\Admins\JLC\Coding\PowerShell\Reboot-Cycl
 Write-Host "Checking $($ServerList.count) Servers"
 foreach ($Server in $ServerList) 
     {
-        $ServerUptime = uptime $server
+        $ServerUptime = Get-uptime $server
         Write-host $ServerUptime
     }
