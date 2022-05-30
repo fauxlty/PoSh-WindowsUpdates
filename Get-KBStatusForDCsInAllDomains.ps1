@@ -1,9 +1,10 @@
 $array=@()
-#$server=""
+$server=""
 $kb=""
+$HotFixID=""
 $totaldcs=""
-$totaldomains = ""
-$totaldomainservers = ""
+$totaldomains=""
+$totaldomainservers=""
 $customobject=""
 $os=""
 $isstaged=""
@@ -13,16 +14,17 @@ $date = get-date -UFormat “%Y-%m-%d"
 $i=0
 $v=0
 $p=0
-#$DomainName = "homeoffice.Wal-Mart.com"
+$s=0
+$targetdomain = "Wal-Mart.Com"
 
 #Check user domain for defaults
 #$targetdomain=$DomainName
-$targetdomain=$env:UserDNSDomain
+#$targetdomain=$env:UserDNSDomain
 $domainname = $targetdomain
 
-$kb = Read-Host "Please enter the KB article in question"
+$HotFixID = Read-Host "Please enter the KB article in question"
 
-$forestname = (Get-ADForest -Server $DomainName)
+$forestname = (Get-ADForest -Server $DomainName).rootdomain
 $totaldomains = ((Get-ADForest -Server $DomainName).Domains).count
 
 Write-Host "Total domains found in"$targetdomain.ToUpper()": $totaldomains"
@@ -51,11 +53,12 @@ foreach ($domainname in (Get-ADForest -Server $targetdomain).Domains)
             #Current percentage of $ServersToScan
             Write-Progress -Activity "Scanning $v of $totaldomainservers servers in this domain" -PercentComplete (($v/$totaldomainservers)*100) -CurrentOperation ($server.ToUpper()) -parentID 1
 
-            $kb=get-hotfix -ComputerName $Server | Where-Object {$_.HotfixID -Like $hotfixID} 
+            $kb=get-hotfix -ComputerName $Server | Where-Object {$_.HotfixID -Like "*$hotfixID*"} 
                 
                     if (($kb.HotFixID).count -gt "0") 
                         {
                            $isstaged = "Yes"
+                           $s++
                         } 
                     else 
                         {
@@ -84,6 +87,7 @@ foreach ($domainname in (Get-ADForest -Server $targetdomain).Domains)
             $customobject | Add-Member -MemberType NoteProperty -Name 'Staged' -Value $isstaged
             $customobject | Add-Member -MemberType NoteProperty -Name 'Patched' -Value $ispatched
             $customobject | Add-Member -MemberType NoteProperty -Name 'ScanDate' -Value $scandate
+            $customobject | Add-Member -MemberType NoteProperty -Name 'TimeScanned' -Value (get-date -UFormat “%Y-%m-%d %H:%M:%S”)
 
             $array = $array + $customobject
             
@@ -92,11 +96,15 @@ foreach ($domainname in (Get-ADForest -Server $targetdomain).Domains)
 }
     
 write-host "Total domains found = $totaldomains"
-
 $totaldcs = $array.Count
 write-host "Total Domain Controllers found = $totaldcs"
-
-Write-host "Domain Controllers with $hotfixID = $p"
+write-host "DCs with $hotfixID staged: $s"
+write-host "DCs with $hotfixID installed: $p"
 
 $array | Format-Table -autosize
-$array | Export-Csv -NoTypeInformation -Force "wmforestpatch-$hotfixID-$date.csv"
+$array | Export-Csv -NoTypeInformation -Force "KBScan-$forestname-$hotfixID-$date.csv"
+
+#Close up shop
+#$array=@()
+
+#[gc]::Collect()
