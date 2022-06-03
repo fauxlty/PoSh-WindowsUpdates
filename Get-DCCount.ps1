@@ -10,8 +10,8 @@ Write-Host "Current forest is $forest"
 # }
     
 foreach ($domain in $domainlist) {
-    $DClist = Get-ADDomainController -DomainName $domain -Filter *
-    $GClist = Get-Addomaincontroller -DomainName $domain -filter *  |  where-object { $_.isglobalcatalog -eq $true }
+    $DClist = Get-ADDomainController -Server $domain -Filter *
+    $GClist = Get-Addomaincontroller -Server $domain -filter *  |  where-object { $_.isglobalcatalog -eq $true }
    
     $GCnumber = $GClist.count
     $DCnumber = $DClist.count
