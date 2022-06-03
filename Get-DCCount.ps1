@@ -1,18 +1,17 @@
-$domain=""
-$arrayTotalDCCount=@()
+$domain = ""
+$arrayTotalDCCount = @()
 
 $forest = Get-ADForest
-$domainlist= get-adforest | Select-Object -expandproperty domains
+$domainlist = get-adforest | Select-Object -expandproperty domains
 Write-Host "Current forest is $forest"
 # ForEach ($domain in $domainlist)
 # {
 #     Write-Host $domain
 # }
     
-foreach ($domain in $domainlist)
-{
+foreach ($domain in $domainlist) {
     $DClist = Get-ADDomainController -DomainName $domain -Filter *
-    $GClist = Get-Addomaincontroller -DomainName $domain -filter *  |  where-object {$_.isglobalcatalog -eq $true}
+    $GClist = Get-Addomaincontroller -DomainName $domain -filter *  |  where-object { $_.isglobalcatalog -eq $true }
    
     $GCnumber = $GClist.count
     $DCnumber = $DClist.count

@@ -10,8 +10,7 @@ $ServerUptime = ""
 $ServerList = Get-Content -Path D:\SEID\Admins\JLC\Coding\PowerShell\Reboot-Cycle.txt
 
 Write-Host "Checking $($ServerList.count) Servers"
-foreach ($Server in $ServerList) 
-    {
-        $ServerUptime = Get-uptime $server
-        Write-host $ServerUptime
-    }
+foreach ($Server in $ServerList) {
+    $ServerUptime = Get-uptime $server
+    Write-host $ServerUptime
+}

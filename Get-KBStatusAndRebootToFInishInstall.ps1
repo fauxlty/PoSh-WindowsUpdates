@@ -7,19 +7,19 @@ Write-Host "Checking $($ServerList.count) Servers"
 #$array=@()
 
 foreach ($Server in $ServerList | Select-Object) {
-    $ServerHotfix = get-hotfix -ComputerName $server | Where-Object {$_.HotfixID -Like "*KB5015019*"}
+    $ServerHotfix = get-hotfix -ComputerName $server | Where-Object { $_.HotfixID -Like "*KB5015019*" }
     $installedon = $ServerHotfix.InstalledOn
-        If (
+    If (
 
         $null -eq $installedon
 
-        )
+    )
 
-{$installedon="Hotfix Not Installed On $server"}
+    { $installedon = "Hotfix Not Installed On $server" }
 
-#{Restart-Computer -ComputerName $server -force
-#Start-Sleep -Seconds 180}
+    #{Restart-Computer -ComputerName $server -force
+    #Start-Sleep -Seconds 180}
 
-$result = "$server,$installedon"
-$result
+    $result = "$server,$installedon"
+    $result
 }

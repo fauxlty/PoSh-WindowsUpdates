@@ -3,7 +3,7 @@
 $DomainName = $env:USERDNSDOMAIN
 
 #Forest
-$ServerList = ((Get-ADForest -Server $DomainName).Domains | ForEach-Object{ Get-ADDomainController -Filter * -Server $_ }).hostname
+$ServerList = ((Get-ADForest -Server $DomainName).Domains | ForEach-Object { Get-ADDomainController -Filter * -Server $_ }).hostname
 
 #Domain
 #$ServerList = (Get-ADDomainController -Filter * -Server $DomainName).hostname
@@ -15,12 +15,12 @@ $ServerList = ((Get-ADForest -Server $DomainName).Domains | ForEach-Object{ Get-
 # Check Installed KB's vs KB Search List
 Write-Host "Checking $($ServerList.count) Servers"
 
-$sorted={
-foreach ($Server in $ServerList) {
- get-hotfix -ComputerName $Server | Where-Object {$_.HotfixID -Like "KB5015019"} | Format-Table -AutoSize
- #get-hotfix -ComputerName $Server | where {$_.installedon -Like "*2022"} | Sort-Object -Property InstalledOn | ft -AutoSize
- #get-hotfix -ComputerName $Server | Sort-Object -Property InstalledOn -Descending | ft -AutoSize
-}
+$sorted = {
+    foreach ($Server in $ServerList) {
+        get-hotfix -ComputerName $Server | Where-Object { $_.HotfixID -Like "KB5015019" } | Format-Table -AutoSize
+        #get-hotfix -ComputerName $Server | where {$_.installedon -Like "*2022"} | Sort-Object -Property InstalledOn | ft -AutoSize
+        #get-hotfix -ComputerName $Server | Sort-Object -Property InstalledOn -Descending | ft -AutoSize
+    }
 }
 
 Write-host $sorted | Sort-Object -Property InstalledOn | Format-Table -AutoSize
