@@ -1,7 +1,7 @@
 #Variables
 $account = ""
 $accountlist = "" 
-#$array = @()
+$array = @()
 $i = 0
 
 #Get list of accounts
@@ -19,10 +19,34 @@ Foreach ($account in $accountlist) {
     $Domain
 
     #Get account info using samaccountname and domainname
-    Get-ADUser -Identity "$name" -Server $domain | Out-File "D:\SEID\Admins\JLC\Coding\PowerShell\RemovedAccountsLog-$(get-date -UFormat “%Y-%m-%d").txt" -Encoding ASCII -Append
+    #Get-ADUser -Identity "$name" -Server $domain | Out-File "D:\SEID\Admins\JLC\Coding\PowerShell\RemovedAccountsLog-$(get-date -UFormat “%Y-%m-%d").txt" -Encoding ASCII -Append
+
+    $status = Get-ADUser -Identity "$name" -Server $domain
+
+    if (($status).count -gt "0") {
+        $ispresent = "Yes"
+    } 
+
+    else {
+        $ispresent = "No"
+    }
+
+
+    $customobject = new-object -TypeName PsCustomObject
+    $customobject | Add-Member -MemberType NoteProperty -Name 'UPN' -Value $account.ToUpper()
+    $customobject | Add-Member -MemberType NoteProperty -Name 'samaccountname' -Value $domainname.ToUpper()
+    $customobject | Add-Member -MemberType NoteProperty -Name 'AccountDomain' -Value $domainname.ToUpper()
+    $customobject | Add-Member -MemberType NoteProperty -Name 'IsValid' -Value $ispresent
+    $customobject | Add-Member -MemberType NoteProperty -Name 'TimeScanned' -Value (get-date -UFormat “%Y-%m-%d %H:%M:%S”)
+
+    $array = $array + $customobject
+
 
     $i++
 
 }
 
-Write-Host "$totalaccounts accounts scanned"
+Write-Host "$i accounts scanned"
+
+$array.GetEnumerator() | ft -AutoSize
+$array | Export-Csv -NoTypeInformation -Force "D:\SEID\Admins\JLC\Coding\PowerShell\Accounts-Scanned-$i-$(get-date -UFormat “%Y-%m-%d").csv"
