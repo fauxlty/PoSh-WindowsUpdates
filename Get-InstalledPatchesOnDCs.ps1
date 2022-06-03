@@ -17,8 +17,7 @@ $kb = Read-Host "Please enter the KB article in question"
 $totaldomains = ((Get-ADDomainController -Server $domainname -Filter *).HostName).count
 Write-Host "Total domains found in"$targetdomain.ToUpper()": $totaldomains"
 
-foreach ($domainname in (Get-ADForest -Server $targetdomain).Domains)
-{
+foreach ($domainname in (Get-ADForest -Server $targetdomain).Domains) {
     $totaldomaindcs = ((Get-ADDomainController -Server $domainname -Filter *).HostName).count
     Write-Host "Total DCs found in"$domainname.ToUpper()": $totaldomaindcs"
 
@@ -30,8 +29,7 @@ foreach ($domainname in (Get-ADForest -Server $targetdomain).Domains)
 
     Write-Progress -Activity "Scanning Domain" -PercentComplete (($i / $totaldomains) * 100) -CurrentOperation ($domainname.ToUpper()) -ID 1
 
-    foreach ($dc in (Get-ADDomainController -Server $domainname -Filter *).HostName)
-    {
+    foreach ($dc in (Get-ADDomainController -Server $domainname -Filter *).HostName) {
         $Hotfix = Get-HotFix -ComputerName $dc
         if ($hotfix -like "*$kb*") {
             $ispatched = "Yes"
