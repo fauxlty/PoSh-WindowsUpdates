@@ -1,0 +1,1 @@
+Get-ADUser -Identity "CN=DC Maintenance,OU=ProcessIDs,OU=Admins,DC=Wal-Mart,DC=com" -Server wal-mart.com | Remove-ADUser -Confirm | Out-File "D:\SEID\Admins\JLC\Coding\PowerShell\RemovedAccountsLog-$(get-date -UFormat “%Y-%m-%d").txt" -Encoding ASCII -Append

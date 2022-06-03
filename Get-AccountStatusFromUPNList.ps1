@@ -46,7 +46,7 @@ Foreach ($account in $accountlist) {
 
 }
 
-Write-Host "$i accounts scanned"
+Write-Host "$totalaccounts accounts scanned"
 
-$array.GetEnumerator() | ft -AutoSize
+$array.GetEnumerator() | Format-Table -AutoSize
 $array | Export-Csv -NoTypeInformation -Force "D:\SEID\Admins\JLC\Coding\PowerShell\Accounts-Scanned-$i-$(get-date -UFormat “%Y-%m-%d").csv"
