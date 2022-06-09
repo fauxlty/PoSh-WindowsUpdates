@@ -1,0 +1,1 @@
+Get-AdReplicationSite -Filter * | Select Name
