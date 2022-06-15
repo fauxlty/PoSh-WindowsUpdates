@@ -52,28 +52,29 @@ $servers = Get-Content "D:\SEID\Admins\JLC\Coding\PowerShell\serverlist.txt"
 $ServersToScan = $servers.Count
 
 foreach ($server in $servers) {
-    Write-Host "Attempting $Server"
+	Write-Host "Attempting $Server" -ForegroundColor Cyan 
 
-    $ZIPDestTargetPath = "\\$Server\$DestSharePath"
-    $direxists = (Test-Path -Path $ZIPDestDirectoryPath -IsValid)
-    write-host "Copying $ZIPFilePath to $ZIPDestTargetPath"
-    if ($direxists = $true) {
-        Copy-Item -Path $ZIPFilePath -Recurse -destination $ZIPDestTargetPath -Force
-        Expand-Archive -Path "$ZIPDestTargetPath\dcpromo.zip" -DestinationPath $ZIPDestTargetPath -Force
-        $present++
-    } 
-    else {
-        New-Item -ItemType "directory" -Path $ZIPDestTargetPath -Force
-        Copy-Item -Path $ZIPFilePath -Recurse -destination $ZIPDestTargetPath -Force
-        Expand-Archive -Path "$ZIPDestTargetPath\dcpromo.zip" -DestinationPath $ZIPDestTargetPath -Force
-        $notpresent++
-    }
+	$ZIPDestTargetPath = "\\$Server\$DestSharePath"
+	$direxists = (Test-Path -Path $ZIPDestDirectoryPath -IsValid)
+	write-host "Copying $ZIPFilePath to $ZIPDestTargetPath"
+
+	if ($direxists = $true) {
+		Copy-Item -Path $ZIPFilePath -Recurse -destination $ZIPDestTargetPath -Force
+		Expand-Archive -Path "$ZIPDestTargetPath\dcpromo.zip" -DestinationPath $ZIPDestTargetPath -Force
+		$present++
+	} 
+	else {
+		New-Item -ItemType "directory" -Path $ZIPDestTargetPath -Force
+		Copy-Item -Path $ZIPFilePath -Recurse -destination $ZIPDestTargetPath -Force
+		Expand-Archive -Path "$ZIPDestTargetPath\dcpromo.zip" -DestinationPath $ZIPDestTargetPath -Force
+		$notpresent++
+	}
 
 }     
 
-Write-Host "Servers with directory: $present"
-Write-Host "Servers without directory: $notpresent"
-Write-Host "Total servers scanned and copied to: $ServersToScan"
+Write-Host "Servers with directory: $present" -ForegroundColor Cyan
+Write-Host "Servers without directory initially: $notpresent" -ForegroundColor Yellow
+Write-Host "Total servers scanned and copied to: $ServersToScan" -ForegroundColor Green
 
 #Close up shop
 #$array=@()
