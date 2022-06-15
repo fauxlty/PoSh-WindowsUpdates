@@ -1,3 +1,6 @@
+$server = ""
+$servers = ""
+$SecurityGroup = ""
 $ServersToScan = 0
 $null = [bool]$InGroup
 $present = 0
@@ -6,7 +9,6 @@ $notpresent = 0
 $servers = Get-Content "serverlist.txt"
 $ServersToScan = $servers.Count
 
-#$SecurityGroup="ADDS-DSCoreSAAdmins"
 $SecurityGroup = "ADDS-GPOACL-DomainControllerIsolation"
 
 foreach ($server in $servers) {
@@ -30,7 +32,6 @@ foreach ($server in $servers) {
         Add-ADGroupMember -Identity 'ADDS-GPOACL-DomainControllerIsolation' -Members $SAMAccountName -Server $hostdomain
         $notpresent++
     }
-
 }     
 
 Write-Host "Servers in Isolation Group: $present" -ForegroundColor Cyan
