@@ -27,6 +27,7 @@ foreach ($server in $servers) {
         $isdc = 0
     }
     
+    
     #$server; $hostdomain; $hostaccount,$SAMAccountName 
     $InGroup = ((Get-ADGroupMember -Identity $SecurityGroup -Server "$hostdomain").name | Where-Object { $_ -like "$hostaccount*" }).count
 
@@ -82,7 +83,3 @@ Write-Host "Servers that are NOT Domain Controllers: $notaDC" -ForegroundColor R
 Write-Host "Servers in Isolation Group: $insecgroup" -ForegroundColor Green
 Write-Host "Servers NOT in Isolation Group currently: $notinsecgroup" -ForegroundColor Yellow
 Write-Host "Total servers scanned for DC role: $ServersToScan" -ForegroundColor Green
-
-#Close up shop
-#$array=@()
-[gc]::Collect()

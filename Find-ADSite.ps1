@@ -197,7 +197,7 @@ Function Find-ADSite {
         else {
 
             Write-Verbose "AD Subnet not found for $IP"
-            if ($IP -eq $null) { $IP = "" } # required to prevent exception on ToString() below
+            if ($null -eq $IP) { $IP = "" } # required to prevent exception on ToString() below
 
             New-Object -TypeName PSObject -Property @{
                 ComputerName = $ComputerName
