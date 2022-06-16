@@ -17,7 +17,7 @@ foreach ($server in $servers) {
     Write-Host "Checking if $Server is in $SecurityGroup" -ForegroundColor Cyan
     $hostaccount = ($server.split('.')[0])
     $hostdomain = $server.Substring($server.IndexOf(".") + 1)
-    $SAMAccountName = ($server.split('.')[0] + '$') 
+    #$SAMAccountName = ($server.split('.')[0] + '$') 
     $isdc = ((net view \\$server) -match "sysvol").count
 
     if ($isdc -eq 1) {
@@ -69,7 +69,7 @@ foreach ($server in $servers) {
     else {
         write-host "$server is NOT present in $securitygroup and has no site defined" -ForegroundColor Red
             
-        #If the server isn't in the appropriate security group, add it to said group
+        #If the server isn't in the appropriate security group, add it to said group; be sure to uncomment the $SAMAccountName variable up above
         #Add-ADGroupMember -Identity 'ADDS-GPOACL-DomainControllerIsolation' -Members $SAMAccountName -Server $hostdomain
         $notinsecgroup++
         $notaDC++
