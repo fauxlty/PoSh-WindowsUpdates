@@ -1,3 +1,8 @@
+#Copied from https://www.thewindowsclub.com/check-windows-update-history-using-powershell
+# Get all the update History, formatted as a table
+#Get-WuaHistory | Format-Table
+
+
 function Convert-WuaResultCodeToName {
     param( [Parameter(Mandatory = $true)]
         [int] $ResultCode
